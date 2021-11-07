@@ -41,5 +41,4 @@ gradle-app.setting
 hs_err_pid*
 
 ### Cusom template
-src/test
 .idea
