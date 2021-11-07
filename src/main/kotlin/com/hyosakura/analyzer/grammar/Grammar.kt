@@ -4,33 +4,60 @@ package com.hyosakura.analyzer.grammar
  * @author LovesAsuna
  **/
 interface Symbol {
-    val symbol : String
+    val symbol: String
 }
 
-class NonTerm(override val symbol: String) : Symbol
+class NonTerm(override val symbol: String) : Symbol {
+    override fun toString(): String = symbol
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
-class Term(override val symbol: String) : Symbol
+        other as NonTerm
 
-data class Rule(
-    val head: NonTerm,
-    val body: List<Symbol>
-) {
-    override fun toString(): String {
-        val builder = StringBuilder()
-        body.forEach {
-            builder.append(it.symbol)
-        }
-        return "${head.symbol}->${builder}"
+        if (symbol != other.symbol) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return symbol.hashCode()
+    }
+}
+
+class Term(override val symbol: String) : Symbol {
+    override fun toString(): String = symbol
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as NonTerm
+
+        if (symbol != other.symbol) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return symbol.hashCode()
     }
 }
 
 class Grammar(
-    val rules: MutableList<Rule>
+    val head: NonTerm,
+    val rules: MutableMap<NonTerm, MutableList<List<Symbol>>>
 ) {
     override fun toString(): String {
         val builder = StringBuilder()
-        rules.forEach {
-            builder.append(it.toString())
+        rules.forEach { entry ->
+            builder.append("${entry.key}->")
+            for (i in 0 until entry.value.size) {
+                builder.append(entry.value[i].joinToString(""))
+                if (i != entry.value.size - 1) {
+                    builder.append("|")
+                }
+            }
             builder.append("\n")
         }
         return builder.toString()
