@@ -3,8 +3,6 @@ package com.hyosakura.analyzer.parser
 import com.hyosakura.analyzer.grammar.detector.SimplifyDetector
 import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.Assertions.*
-
 internal class SimplifyDetectorTest {
 
     @Test
