@@ -1,6 +1,6 @@
-package com.hyosakura.analyzer.parser
+package com.hyosakura.analyzer.grammar.detector
 
-import com.hyosakura.analyzer.grammar.detector.SimplifyDetector
+import com.hyosakura.analyzer.parser.GrammarScanner
 import org.junit.jupiter.api.Test
 
 internal class SimplifyDetectorTest {
