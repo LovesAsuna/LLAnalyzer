@@ -13,31 +13,37 @@ class GrammarScanner {
         val lines = gramStr.lines().filterNot {
             it.isEmpty() || it.isBlank()
         }
-        val ruleList = mutableMapOf<NonTerm, MutableList<List<Symbol>>>()
+        val ruleList = mutableMapOf<NonTerm, MutableList<MutableList<Symbol>>>()
         val headPair = parseSingleLine(lines.first())
         ruleList.computeIfAbsent(headPair.first) {
             mutableListOf()
-        }.add(headPair.second)
+        }.addAll(headPair.second)
         for (i in 1 until lines.size) {
             val pair = parseSingleLine(lines[i])
             ruleList.computeIfAbsent(pair.first) {
                 mutableListOf()
-            }.add(pair.second)
+            }.addAll(pair.second)
         }
         return Grammar(headPair.first, ruleList)
     }
 
-    private fun parseSingleLine(gramStr: String): Pair<NonTerm, List<Symbol>> {
+    private fun parseSingleLine(gramStr: String): Pair<NonTerm, MutableList<MutableList<Symbol>>> {
         val splitStr = gramStr.split("->")
-        if (splitStr.size != 2) throw RuntimeException("syntax error at $splitStr: $gramStr")
+        if (splitStr.size != 2) throw RuntimeException("syntax error at $gramStr")
         val head = splitStr[0].trim()
-        val body = splitStr[1].trim()
-        return NonTerm(head) to body.map {
-            if (it.isLowerCase()) {
-                Term(it.toString())
-            } else {
-                NonTerm(it.toString())
-            }
+        val body = splitStr[1].trim().split("|")
+        val ruleList = mutableListOf<MutableList<Symbol>>()
+        body.forEach {
+            ruleList.add(
+                it.trim().map { char ->
+                    if (char.isLowerCase()) {
+                        Term(char.toString())
+                    } else {
+                        NonTerm(char.toString())
+                    }
+                }.toMutableList()
+            )
         }
+        return NonTerm(head) to ruleList
     }
 }
