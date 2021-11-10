@@ -32,7 +32,7 @@ class Term(override val symbol: String) : Symbol {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as NonTerm
+        other as Term
 
         if (symbol != other.symbol) return false
 
@@ -46,7 +46,7 @@ class Term(override val symbol: String) : Symbol {
 
 class Grammar(
     val head: NonTerm,
-    val rules: MutableMap<NonTerm, MutableList<List<Symbol>>>
+    val rules: MutableMap<NonTerm, MutableList<MutableList<Symbol>>>
 ) {
     override fun toString(): String {
         val builder = StringBuilder()
