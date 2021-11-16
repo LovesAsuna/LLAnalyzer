@@ -1,6 +1,7 @@
 package com.hyosakura.analyzer.grammar.detector
 
 import com.hyosakura.analyzer.grammar.Grammar
+import com.hyosakura.analyzer.grammar.NonTerm
 
 /**
  * @author LovesAsuna
@@ -12,4 +13,12 @@ interface Detector {
      * @return 此文法
      */
     fun detect(grammar: Grammar): Grammar
+
+    fun NonTerm.getTermWithComma(grammar: Grammar): NonTerm {
+        var newNonTerm = NonTerm("${this.symbol}'")
+        while (grammar.rules.keys.contains(newNonTerm)) {
+            newNonTerm = NonTerm("${newNonTerm.symbol}'")
+        }
+        return newNonTerm
+    }
 }

@@ -24,7 +24,7 @@ class LeftCommonFactorDetector : Detector {
                     }
                 ) {
                     val newValue = mutableListOf<MutableList<Symbol>>()
-                    val newTerm = NonTerm("${key.symbol}'")
+                    val newTerm = key.getTermWithComma(grammar)
                     newValue.add(mutableListOf(firstTerm, newTerm))
                     value.forEach {
                         it.removeFirst()
