@@ -1,9 +1,6 @@
 package com.hyosakura.analyzer.grammar.detector
 
-import com.hyosakura.analyzer.grammar.Grammar
-import com.hyosakura.analyzer.grammar.NonTerm
-import com.hyosakura.analyzer.grammar.Symbol
-import com.hyosakura.analyzer.grammar.Term
+import com.hyosakura.analyzer.grammar.*
 
 /**
  * @author LovesAsuna
@@ -29,7 +26,7 @@ class LeftCommonFactorDetector : Detector {
                     value.forEach {
                         it.removeFirst()
                         if (it.isEmpty()) {
-                            it.add(Term("ε"))
+                            it.add(Empty)
                         }
                     }
                     map[newTerm] = value

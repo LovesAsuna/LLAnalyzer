@@ -1,9 +1,6 @@
 package com.hyosakura.analyzer.grammar.detector
 
-import com.hyosakura.analyzer.grammar.Grammar
-import com.hyosakura.analyzer.grammar.NonTerm
-import com.hyosakura.analyzer.grammar.Symbol
-import com.hyosakura.analyzer.grammar.Term
+import com.hyosakura.analyzer.grammar.*
 
 /**
  * @author LovesAsuna
@@ -74,7 +71,7 @@ class LeftRecursiveDetector : Detector {
                 it.add(newTerm)
             })
         }
-        valueOfNewTerm.add(mutableListOf(Term("ε")))
+        valueOfNewTerm.add(mutableListOf(Empty))
         grammar.rules[newTerm] = valueOfNewTerm
     }
 }

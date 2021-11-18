@@ -1,9 +1,6 @@
 package com.hyosakura.analyzer.parser
 
-import com.hyosakura.analyzer.grammar.Grammar
-import com.hyosakura.analyzer.grammar.NonTerm
-import com.hyosakura.analyzer.grammar.Symbol
-import com.hyosakura.analyzer.grammar.Term
+import com.hyosakura.analyzer.grammar.*
 
 /**
  * @author LovesAsuna
@@ -34,9 +31,12 @@ class GrammarScanner {
         val body = splitStr[1].trim().split("|")
         val ruleList = mutableListOf<MutableList<Symbol>>()
         body.forEach {
+            if (it.isEmpty()) throw RuntimeException("syntax error at $gramStr")
             ruleList.add(
                 it.trim().map { char ->
-                    if (char.isLowerCase()) {
+                    if (char == 'ε') {
+                        Empty
+                    } else if (char.isLowerCase()) {
                         Term(char.toString())
                     } else {
                         NonTerm(char.toString())
