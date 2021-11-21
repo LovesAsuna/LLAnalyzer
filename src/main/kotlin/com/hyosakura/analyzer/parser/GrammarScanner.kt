@@ -28,21 +28,36 @@ class GrammarScanner {
         val splitStr = gramStr.split("->")
         if (splitStr.size != 2) throw RuntimeException("syntax error at $gramStr")
         val head = splitStr[0].trim()
-        val body = splitStr[1].trim().split("|")
+        val body = splitStr[1].replace(" ", "").split("|")
         val ruleList = mutableListOf<MutableList<Symbol>>()
         body.forEach {
             if (it.isEmpty()) throw RuntimeException("syntax error at $gramStr")
-            ruleList.add(
-                it.trim().map { char ->
-                    if (char == 'ε') {
-                        Empty
-                    } else if (char.isLowerCase()) {
-                        Term(char.toString())
-                    } else {
-                        NonTerm(char.toString())
+            val singleRule = mutableListOf<Symbol>()
+            var i = 0
+            while (i < it.length) {
+                val char = it[i]
+                if (char == '\'') {
+                    i++
+                    continue
+                }
+                val symbol = if (char == 'ε') {
+                    i++
+                    Empty
+                } else if (char.isUpperCase()) {
+                    var count = 0
+                    i++
+                    while (i < it.length && it[i] == '\'') {
+                        count++
+                        i++
                     }
-                }.toMutableList()
-            )
+                    NonTerm("$char${"'".repeat(count)}")
+                } else {
+                    i++
+                    Term("$char")
+                }
+                singleRule.add(symbol)
+            }
+            ruleList.add(singleRule)
         }
         return NonTerm(head) to ruleList
     }
