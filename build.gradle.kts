@@ -7,18 +7,15 @@ plugins {
 group = "com.hyosakura"
 version = "1.0-SNAPSHOT"
 
-repositories {
-    mavenCentral()
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+
+    tasks.withType<KotlinCompile>() {
+        kotlinOptions.jvmTarget = "1.8"
+    }
 }
 
-dependencies {
-    testImplementation(kotlin("test"))
-}
 
-tasks.test {
-    useJUnitPlatform()
-}
 
-tasks.withType<KotlinCompile>() {
-    kotlinOptions.jvmTarget = "1.8"
-}
