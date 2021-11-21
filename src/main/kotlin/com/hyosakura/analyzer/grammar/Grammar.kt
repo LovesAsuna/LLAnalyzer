@@ -61,6 +61,11 @@ class Grammar(
     val first: MutableMap<Symbol, MutableSet<Symbol>> = mutableMapOf()
     val follow: MutableMap<Symbol, MutableSet<Symbol>> = mutableMapOf()
 
+    init {
+        getFirst()
+        getFollow()
+    }
+
     override fun toString(): String {
         val builder = StringBuilder()
         rules.forEach { entry ->
@@ -76,11 +81,19 @@ class Grammar(
         return builder.toString()
     }
 
-    fun getFirst(symbol: Symbol): MutableSet<Symbol> {
+    private fun getFirst() {
+        rules.forEach { entry ->
+            this.first.putIfAbsent(entry.key, getFirstPerLine(entry.key))
+        }
+    }
+
+    private fun getFirstPerLine(symbol: Symbol): MutableSet<Symbol> {
+        if (symbol is Term) {
+            return mutableSetOf(symbol)
+        }
         val first = mutableSetOf<Symbol>()
         val rule = rules[symbol]!!
-        for (i in 0 until rule.size) {
-            val singleRule = rule[i]
+        for (singleRule in rule) {
             val singleFirst = mutableSetOf<Symbol>()
             var k = 0
             while (k <= singleRule.size) {
@@ -90,7 +103,7 @@ class Grammar(
                     singleFirst.add(s)
                     break
                 } else {
-                    firstOfS.addAll(getFirst(s))
+                    firstOfS.addAll(getFirstPerLine(s))
                 }
                 singleFirst.addAll(firstOfS - Empty)
                 if (!firstOfS.contains(Empty)) {
@@ -103,7 +116,45 @@ class Grammar(
             }
             first.addAll(singleFirst)
         }
-        this.first.putIfAbsent(symbol, first)
         return first
+    }
+
+    private fun getFollow() {
+        // init follow
+        rules.forEach { entry ->
+            if (entry.key == head) {
+                this.follow[entry.key] = mutableSetOf(EOS)
+            } else {
+                this.follow[entry.key] = mutableSetOf()
+            }
+        }
+        var change = false
+        while (!change) {
+            change = false
+            rules.forEach { entry ->
+                val rule = entry.value
+                for (i in 0 until rule.size) {
+                    val singleRule = rule[i]
+                    for (j in 0 until singleRule.size) {
+                        val symbol = singleRule[j]
+                        if (symbol is Term) {
+                            continue
+                        } else if (symbol is NonTerm) {
+                            // symbol is the last
+                            if (j == singleRule.size - 1) {
+                                change = follow[symbol]!!.addAll(follow[entry.key]!!) || change
+                            } else {
+                                val nextSymbol = singleRule[j + 1]
+                                val firstOfNext = getFirstPerLine(nextSymbol)
+                                change = follow[symbol]!!.addAll(firstOfNext - Empty) || change
+                                if (firstOfNext.contains(Empty)) {
+                                    change = follow[symbol]!!.addAll(follow[entry.key]!!) || change
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
