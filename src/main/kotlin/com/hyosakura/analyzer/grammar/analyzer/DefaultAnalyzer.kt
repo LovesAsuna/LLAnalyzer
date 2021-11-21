@@ -35,5 +35,4 @@ class DefaultAnalyzer(private val table: LLTable) : Analyzer {
         }
         return true
     }
-
 }
