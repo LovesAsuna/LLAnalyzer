@@ -1,6 +1,5 @@
 import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
@@ -32,10 +31,10 @@ tasks.compileKotlin {
 
 compose.desktop {
     application {
-        mainClass = "com.hyosakura.xlex.MainKt"
+        mainClass = "com.hyosakura.analyzer.MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Exe)
-            packageName = "XLEX"
+            packageName = "LLAnalyzer"
             packageVersion = "1.0.0"
         }
     }
