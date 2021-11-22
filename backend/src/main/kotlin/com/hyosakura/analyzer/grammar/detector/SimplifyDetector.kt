@@ -1,9 +1,6 @@
 package com.hyosakura.analyzer.grammar.detector
 
-import com.hyosakura.analyzer.grammar.Grammar
-import com.hyosakura.analyzer.grammar.NonTerm
-import com.hyosakura.analyzer.grammar.Symbol
-import com.hyosakura.analyzer.grammar.Term
+import com.hyosakura.analyzer.grammar.*
 import java.util.*
 
 /**
@@ -36,7 +33,7 @@ open class SimplifyDetector : Detector {
                 }
                 set.add(pathStack.first)
             }
-            if (set.stream().noneMatch { hasTerm(grammar.rules[it]!!) }) {
+            if (set.stream().noneMatch { hasTermOrEmpty(grammar.rules[it]!!) }) {
                 grammar.rules.keys.removeAll(set)
                 fun removeInvalidValue() {
                     grammar.rules.values.forEach { outer ->
@@ -76,9 +73,9 @@ open class SimplifyDetector : Detector {
         dfaPathMap[nonTerm] = false
     }
 
-    private fun hasTerm(list: List<List<Symbol>>): Boolean {
+    private fun hasTermOrEmpty(list: List<List<Symbol>>): Boolean {
         return list.stream().anyMatch {
-            it.size == 1 && it.first() is Term
+            it.first() is Term || it.first() is Empty
         }
     }
 
