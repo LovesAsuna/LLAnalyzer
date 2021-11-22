@@ -61,11 +61,6 @@ class Grammar(
     val first: MutableMap<Symbol, MutableSet<Symbol>> = mutableMapOf()
     val follow: MutableMap<Symbol, MutableSet<Symbol>> = mutableMapOf()
 
-    init {
-        getFirst()
-        getFollow()
-    }
-
     override fun toString(): String {
         val builder = StringBuilder()
         rules.forEach { entry ->
@@ -81,10 +76,11 @@ class Grammar(
         return builder.toString()
     }
 
-    private fun getFirst() {
+    fun getFirst(): Grammar {
         rules.forEach { entry ->
             this.first.putIfAbsent(entry.key, getFirstPerLine(entry.key))
         }
+        return this
     }
 
     private fun getFirstPerLine(symbol: Symbol): MutableSet<Symbol> {
@@ -119,7 +115,7 @@ class Grammar(
         return first
     }
 
-    private fun getFollow() {
+    fun getFollow(): Grammar {
         // init follow
         rules.forEach { entry ->
             if (entry.key == head) {
@@ -156,5 +152,6 @@ class Grammar(
                 }
             }
         }
+        return this
     }
 }

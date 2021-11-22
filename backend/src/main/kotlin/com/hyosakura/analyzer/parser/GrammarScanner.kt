@@ -40,7 +40,7 @@ class GrammarScanner {
                     i++
                     continue
                 }
-                val symbol = if (char == 'ε') {
+                val symbol = if (char == '@') {
                     i++
                     Empty
                 } else if (char.isUpperCase()) {

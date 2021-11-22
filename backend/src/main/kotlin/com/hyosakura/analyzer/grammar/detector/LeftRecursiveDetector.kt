@@ -1,6 +1,9 @@
 package com.hyosakura.analyzer.grammar.detector
 
-import com.hyosakura.analyzer.grammar.*
+import com.hyosakura.analyzer.grammar.Empty
+import com.hyosakura.analyzer.grammar.Grammar
+import com.hyosakura.analyzer.grammar.NonTerm
+import com.hyosakura.analyzer.grammar.Symbol
 
 /**
  * @author LovesAsuna

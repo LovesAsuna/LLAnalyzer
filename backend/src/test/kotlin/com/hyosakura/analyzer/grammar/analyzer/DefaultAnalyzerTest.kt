@@ -15,7 +15,7 @@ internal class DefaultAnalyzerTest {
               B -> d | e
         """.trimIndent()
         val grammar = GrammarScanner().parse(str)
-        val table = LLTable(grammar)
+        val table = DefaultTable(grammar)
         val analyzer = DefaultAnalyzer(table)
         assertTrue(analyzer.analyze("abd"))
     }
