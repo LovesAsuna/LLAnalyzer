@@ -33,7 +33,7 @@ open class SimplifyDetector : Detector {
                 }
                 set.add(pathStack.first)
             }
-            if (set.stream().noneMatch { hasTermOrEmpty(grammar.rules[it]!!) }) {
+            if (set.stream().noneMatch { hasTermOrEmpty(grammar, it, grammar.rules[it]!!) }) {
                 grammar.rules.keys.removeAll(set)
                 fun removeInvalidValue() {
                     grammar.rules.values.forEach { outer ->
@@ -73,10 +73,26 @@ open class SimplifyDetector : Detector {
         dfaPathMap[nonTerm] = false
     }
 
-    private fun hasTermOrEmpty(list: List<List<Symbol>>): Boolean {
-        return list.stream().anyMatch {
-            it.first() is Term || it.first() is Empty
+    private fun hasTermOrEmpty(grammar: Grammar, left: NonTerm, list: List<List<Symbol>>): Boolean {
+        if (list.isEmpty()) {
+            return false
         }
+        if (
+            list.stream().anyMatch {
+                it.first() is Term || it.first() is Empty
+            }
+        ) {
+            return true
+        }
+        var flag = false
+        for (e in list) {
+            if (e.first() == left) continue
+            flag = flag || hasTermOrEmpty(grammar, e.first() as NonTerm, grammar.rules[e.first() as NonTerm]!!)
+            if (flag) {
+                return true
+            }
+        }
+        return flag
     }
 
     private fun removeRedundant(grammar: Grammar) {
