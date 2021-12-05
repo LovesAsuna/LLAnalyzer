@@ -24,7 +24,7 @@ open class GrammarScanner {
         return Grammar(headPair.first, ruleList)
     }
 
-    protected fun parseSingleLine(gramStr: String): Pair<NonTerm, MutableList<MutableList<Symbol>>> {
+    protected open fun parseSingleLine(gramStr: String): Pair<NonTerm, MutableList<MutableList<Symbol>>> {
         val splitStr = gramStr.split("->")
         if (splitStr.size != 2) throw RuntimeException("syntax error at $gramStr")
         val head = splitStr[0].trim()
