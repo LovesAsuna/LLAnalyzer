@@ -5,7 +5,7 @@ import com.hyosakura.analyzer.grammar.*
 /**
  * @author LovesAsuna
  **/
-class GrammarScanner {
+open class GrammarScanner {
     fun parse(gramStr: String): Grammar {
         val lines = gramStr.lines().filterNot {
             it.isEmpty() || it.isBlank()
@@ -24,7 +24,7 @@ class GrammarScanner {
         return Grammar(headPair.first, ruleList)
     }
 
-    private fun parseSingleLine(gramStr: String): Pair<NonTerm, MutableList<MutableList<Symbol>>> {
+    protected fun parseSingleLine(gramStr: String): Pair<NonTerm, MutableList<MutableList<Symbol>>> {
         val splitStr = gramStr.split("->")
         if (splitStr.size != 2) throw RuntimeException("syntax error at $gramStr")
         val head = splitStr[0].trim()
